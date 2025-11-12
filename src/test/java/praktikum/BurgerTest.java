@@ -61,7 +61,6 @@ public class BurgerTest {
         assertTrue(soyIndex < salmonIndex);
     }
 
-    // === ТЕСТ С ДЕБАГ-ВЫВОДОМ ===
     @Test
     public void shouldGetCorrectReceipt() {
         Bun bun = new Bun("Black bun", 100f);
@@ -73,7 +72,6 @@ public class BurgerTest {
         burger.addIngredient(beef);
         burger.addIngredient(sauce);
 
-        // Точный формат, как в вашем getReceipt()
         String expectedReceipt =
                 "(==== Black bun ====)\r\n" +
                         "= filling Beef =\r\n" +
