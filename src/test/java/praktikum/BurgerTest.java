@@ -11,7 +11,7 @@ public class BurgerTest {
         Bun bun = new Bun("Black bun", 100f);
         Burger burger = new Burger();
         burger.setBuns(bun);
-        assertEquals(200f, burger.getPrice(), 0.01f); // 100 * 2
+        assertEquals(200f, burger.getPrice(), 0.01f);
     }
 
     @Test
@@ -25,7 +25,7 @@ public class BurgerTest {
         burger.addIngredient(ing1);
         burger.addIngredient(ing2);
 
-        assertEquals(320f, burger.getPrice(), 0.01f); // 100*2 + 50 + 70
+        assertEquals(320f, burger.getPrice(), 0.01f);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class BurgerTest {
         burger.addIngredient(ing2);
         burger.removeIngredient(0);
 
-        assertEquals(190f, burger.getPrice(), 0.01f); // 80*2 + 30
+        assertEquals(190f, burger.getPrice(), 0.01f);
     }
 
     @Test
@@ -55,13 +55,13 @@ public class BurgerTest {
         burger.addIngredient(ing2);
         burger.moveIngredient(0, 1);
 
-        // Порядок изменился — проверим через чек
         String receipt = burger.getReceipt();
         int salmonIndex = receipt.indexOf("Salmon");
         int soyIndex = receipt.indexOf("Soy sauce");
         assertTrue(soyIndex < salmonIndex);
     }
 
+    // === ТЕСТ С ДЕБАГ-ВЫВОДОМ ===
     @Test
     public void shouldGetCorrectReceipt() {
         Bun bun = new Bun("Black bun", 100f);
@@ -73,32 +73,33 @@ public class BurgerTest {
         burger.addIngredient(beef);
         burger.addIngredient(sauce);
 
-        String receipt = burger.getReceipt();
+        // Точный формат, как в вашем getReceipt()
+        String expectedReceipt =
+                "(==== Black bun ====)\r\n" +
+                        "= filling Beef =\r\n" +
+                        "= sauce Chili sauce =\r\n" +
+                        "(==== Black bun ====)\r\n" +
+                        "\r\n" +
+                        "Price: 450,000000\r\n";
 
-        assertTrue(receipt.contains("(==== Black bun ====)"));
-
+        assertEquals(expectedReceipt, burger.getReceipt());
     }
-
-    // =============== ТЕСТ С МОКАМИ (для выполнения требования) ===============
+    // =============== ТЕСТ С МОКАМИ ===============
     @Test
     public void shouldCalculatePriceUsingMocks() {
-        // Создаём моки
         Bun mockBun = mock(Bun.class);
         Ingredient mockIng1 = mock(Ingredient.class);
         Ingredient mockIng2 = mock(Ingredient.class);
 
-        // Настраиваем поведение
         when(mockBun.getPrice()).thenReturn(90f);
         when(mockIng1.getPrice()).thenReturn(60f);
         when(mockIng2.getPrice()).thenReturn(40f);
 
-        // Тестируем
         Burger burger = new Burger();
         burger.setBuns(mockBun);
         burger.addIngredient(mockIng1);
         burger.addIngredient(mockIng2);
 
-        // Проверяем итоговую цену: 90*2 + 60 + 40 = 280
         assertEquals(280f, burger.getPrice(), 0.01f);
     }
 }
